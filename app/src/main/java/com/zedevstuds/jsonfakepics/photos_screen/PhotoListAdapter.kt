@@ -1,17 +1,19 @@
 package com.zedevstuds.jsonfakepics.photos_screen
 
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.zedevstuds.jsonfakepics.R
+import com.zedevstuds.jsonfakepics.TAG
 import com.zedevstuds.jsonfakepics.databinding.ItemPhotoBinding
 import com.zedevstuds.jsonfakepics.getImageBitmap
 import com.zedevstuds.jsonfakepics.model.Photo
 import kotlinx.coroutines.*
-import kotlin.coroutines.coroutineContext
 
-class PhotoListAdapter : RecyclerView.Adapter<PhotoListAdapter.PhotoViewHolder>() {
+class PhotoListAdapter(private val imageSetter: ImageSetter) : RecyclerView.Adapter<PhotoListAdapter.PhotoViewHolder>() {
 
     var photoList = listOf<Photo>()
         set(value) {
@@ -33,18 +35,32 @@ class PhotoListAdapter : RecyclerView.Adapter<PhotoListAdapter.PhotoViewHolder>(
     }
 
     // ViewHolder
-    class PhotoViewHolder(private val binding: ItemPhotoBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class PhotoViewHolder(private val binding: ItemPhotoBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(photo: Photo) {
             binding.photoTitleTextView.text = photo.title
             CoroutineScope(Dispatchers.Main).launch {
-                binding.photoImageView.setImageBitmap(download(photo.url))
+                binding.progressBar.visibility = View.VISIBLE
+                binding.photoImageView.setImageBitmap(downloadImageByUrl(photo.url))
+                binding.progressBar.visibility = View.GONE
+            }
+
+//            // Загружаем изображение по URL и устанавливаем его в ImageView
+//           imageSetter.setImage(binding.photoImageView, binding.progressBar, photo.url)
+        }
+
+        // Загружает изображение по URL и возвращает его как Bitmap
+        private suspend fun downloadImageByUrl(url: String): Bitmap? {
+            return withContext(Dispatchers.IO) {
+                Log.d(TAG, "downloadImageByUrl: ")
+                getImageBitmap(url)
             }
         }
 
-        private suspend fun download(url: String): Bitmap? {
-            return withContext(Dispatchers.IO) {
-                getImageBitmap(url)
-            }
+    }
+
+    class ImageSetter(val imageSetter: (view: ImageView, progressBar: View, url: String) -> Unit) {
+        fun setImage(view: ImageView, progressBar: View, url: String) {
+            imageSetter(view, progressBar, url)
         }
     }
 

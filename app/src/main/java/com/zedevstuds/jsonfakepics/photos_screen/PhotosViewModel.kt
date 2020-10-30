@@ -1,6 +1,5 @@
 package com.zedevstuds.jsonfakepics.photos_screen
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,15 +13,23 @@ import kotlinx.coroutines.withContext
 
 class PhotosViewModel : ViewModel() {
 
+    // Список фотографий пользователя
     private val _userPhotos = MutableLiveData<List<Photo>>()
     val userPhotos: LiveData<List<Photo>>
         get() = _userPhotos
 
+    // Статус загрузки
+    private val _status = MutableLiveData<LoadingStatus>()
+    val status: LiveData<LoadingStatus>
+        get() = _status
+
     fun getUserPhotosss(userId: Long?) {
         viewModelScope.launch {
+            _status.value = LoadingStatus.LOADING
             val userAlbums = getUserAlbums(userId, getAlbums())
-            getImageTest(getPhotos()[0].url)
+ //           getImageTest(getPhotos()[0].url)
             _userPhotos.value = getUserPhotos(userAlbums, getPhotos())
+            _status.value = LoadingStatus.DONE
         }
     }
 
@@ -38,10 +45,10 @@ class PhotosViewModel : ViewModel() {
         }
     }
 
-    private suspend fun getImageTest(url: String) {
-        return withContext(Dispatchers.IO) {
-            getImageBitmap(url)
-        }
-    }
+//    private suspend fun getImageTest(url: String) {
+//        return withContext(Dispatchers.IO) {
+//            getImageBitmap(url)
+//        }
+//    }
 
 }

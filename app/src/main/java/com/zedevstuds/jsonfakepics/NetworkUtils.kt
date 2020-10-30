@@ -19,6 +19,9 @@ const val TAG = "myLog"
 // Константа для передачи Bundle во второй фрагмент
 const val USER_ID = "user_id"
 
+// Enum состояний загрузки
+enum class LoadingStatus { LOADING, ERROR, DONE}
+
 // Константы для формирования URL запроса
 const val USERS = "users"
 const val ALBUMS = "albums"
@@ -55,7 +58,6 @@ fun getImageBitmap(urlString: String): Bitmap? {
         urlConnection.setRequestProperty("User-Agent", "jsonFakePics")
         urlConnection.connect()
         val inputStream = urlConnection.inputStream
-        Log.d(TAG, "getImageBitmap: we are here!!!")
         return BitmapFactory.decodeStream(inputStream)
     } catch (e: IOException) {
         e.printStackTrace()
