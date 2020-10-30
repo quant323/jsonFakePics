@@ -20,7 +20,6 @@ class MainViewModel : ViewModel() {
     fun getUsers() {
         viewModelScope.launch {
             _users.value = getUserList()
-//            Log.d(TAG, "Thread is: ${Thread.currentThread().name}")
         }
     }
 

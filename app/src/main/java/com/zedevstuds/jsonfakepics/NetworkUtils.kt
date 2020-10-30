@@ -36,7 +36,6 @@ fun getDataFromNetwork(entity: String, queryKey: String = "", vararg queryValues
     val uri = Uri.parse(BASE_URL).buildUpon().appendPath(entity)
     if (queryKey.isNotEmpty()) {
         for (value in queryValues) {
-            Log.d(TAG, "We are in for loop!")
             uri.appendQueryParameter(queryKey, value)
         }
     }
@@ -57,27 +56,27 @@ fun getDataFromNetwork(entity: String, queryKey: String = "", vararg queryValues
 }
 
 
-fun getDataFromNetwork_old(query: String): String {
-    val uriString = BASE_URL + query
-    Log.d(TAG, uriString)
-    val requestUrl = URL(uriString)
-
-    val urlConnection = requestUrl.openConnection() as (HttpURLConnection)
-    urlConnection.requestMethod = "GET"
-    urlConnection.connect()
-
-    val inputStream = urlConnection.inputStream
-    val reader = BufferedReader(InputStreamReader(inputStream))
-
-    val jsonString = reader.readText()
-
-    urlConnection.disconnect()
-    reader.close()
-    return jsonString
-}
+//fun getDataFromNetwork_old(query: String): String {
+//    val uriString = BASE_URL + query
+//    Log.d(TAG, uriString)
+//    val requestUrl = URL(uriString)
+//
+//    val urlConnection = requestUrl.openConnection() as (HttpURLConnection)
+//    urlConnection.requestMethod = "GET"
+//    urlConnection.connect()
+//
+//    val inputStream = urlConnection.inputStream
+//    val reader = BufferedReader(InputStreamReader(inputStream))
+//
+//    val jsonString = reader.readText()
+//
+//    urlConnection.disconnect()
+//    reader.close()
+//    return jsonString
+//}
 
 // Загружает изображение по URL и возвращает его как Bitmap
-fun getImageBitmap(urlString: String): Bitmap? {
+fun getImageFromNetwork(urlString: String): Bitmap? {
     try {
         val requestUrl = URL(urlString)
         val urlConnection = requestUrl.openConnection() as (HttpsURLConnection)
@@ -141,26 +140,36 @@ fun parsePhotos(json: String): List<Photo> {
     return photoList
 }
 
-// Возвращает список альбомов, принадлежащих данному пользователю
-fun getUserAlbums(userId: Long?, albums: List<Album>): List<Album> {
-    val albumList = ArrayList<Album>()
-    for (album in albums) {
-        if (album.userId == userId) {
-            albumList.add(album)
-        }
-    }
-    return albumList
-}
+//// Возвращает список альбомов, принадлежащих данному пользователю
+//fun getUserAlbums(userId: Long?, albums: List<Album>): List<Album> {
+//    val albumList = ArrayList<Album>()
+//    for (album in albums) {
+//        if (album.userId == userId) {
+//            albumList.add(album)
+//        }
+//    }
+//    return albumList
+//}
+//
+//// Возвращает список фото, принадлежащих данному пользователю
+//fun getUserPhotos(albums: List<Album>, photos: List<Photo>): List<Photo> {
+//    val photoList = ArrayList<Photo>()
+//    for (album in albums) {
+//        for (photo in photos) {
+//            if (photo.albumId == album.id) {
+//                photoList.add(photo)
+//            }
+//        }
+//    }
+//    return photoList
+//}
 
-// Возвращает список фото, принадлежащих данному пользователю
-fun getUserPhotos(albums: List<Album>, photos: List<Photo>): List<Photo> {
-    val photoList = ArrayList<Photo>()
-    for (album in albums) {
-        for (photo in photos) {
-            if (photo.albumId == album.id) {
-                photoList.add(photo)
-            }
-        }
-    }
-    return photoList
-}
+
+//fun getImage(url: String): Bitmap {
+//    val bitmap = BitmapCache.getBitmapFromMemCache(url)
+//    if (bitmap != null) {
+//        return bitmap
+//    } else {
+//
+//    }
+//}

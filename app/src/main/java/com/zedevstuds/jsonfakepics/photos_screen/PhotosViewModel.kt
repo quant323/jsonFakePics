@@ -23,25 +23,30 @@ class PhotosViewModel : ViewModel() {
     val status: LiveData<LoadingStatus>
         get() = _status
 
-    fun getUserPhotosss(userId: Long?) {
+    fun getUserPhotos(userId: Long?) {
         viewModelScope.launch {
             _status.value = LoadingStatus.LOADING
-            val userAlbums = getUserAlbums(userId, getAlbums(userId))
-            val albumsList: List<String> = userAlbums.map {
+            // Получаем список альбомов пользователя
+            val userAlbums = getUserAlbums(userId)
+            // Создаем новый list, содержащий только id альбомов пользователя
+            val albumsId: List<String> = userAlbums.map {
                 it.id.toString()
             }
-            _userPhotos.value = getUserPhotos(userAlbums, getPhotos(albumsList))
+            // Получаем список фото пользователя, по id альбомов, имеющихся у пользователя
+            _userPhotos.value = getPhotosInAlbums(albumsId)
             _status.value = LoadingStatus.DONE
         }
     }
 
-    private suspend fun getAlbums(userId: Long?): List<Album> {
+    // Получает список альбомов выбранного пользователя
+    private suspend fun getUserAlbums(userId: Long?): List<Album> {
         return withContext(Dispatchers.IO) {
             parseAlbums(getDataFromNetwork(ALBUMS, USER_ID, userId.toString()))
         }
     }
 
-    private suspend fun getPhotos(albumsId: List<String>): List<Photo> {
+    // Получает список фото, находящихся в указанных альбомах
+    private suspend fun getPhotosInAlbums(albumsId: List<String>): List<Photo> {
         return withContext(Dispatchers.IO) {
             parsePhotos(getDataFromNetwork(PHOTOS, ALBUM_ID, *albumsId.toTypedArray()))
         }

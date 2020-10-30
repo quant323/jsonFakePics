@@ -47,7 +47,7 @@ class PhotosFragment : Fragment() {
                 else -> binding.mainProgressBar.visibility = View.GONE
             }
         })
-        viewModel.getUserPhotosss(userId)
+        viewModel.getUserPhotos(userId)
         return binding.root
     }
 
