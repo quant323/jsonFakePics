@@ -45,6 +45,7 @@ fun getDataFromNetwork(query: String): String {
     return jsonString
 }
 
+// Загружает изображение по URL и возвращает его как Bitmap
 fun getImageBitmap(urlString: String): Bitmap? {
     try {
         val requestUrl = URL(urlString)
