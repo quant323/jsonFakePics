@@ -1,4 +1,4 @@
-package com.zedevstuds.jsonfakepics
+package com.zedevstuds.jsonfakepics.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -162,14 +162,4 @@ fun parsePhotos(json: String): List<Photo> {
 //        }
 //    }
 //    return photoList
-//}
-
-
-//fun getImage(url: String): Bitmap {
-//    val bitmap = BitmapCache.getBitmapFromMemCache(url)
-//    if (bitmap != null) {
-//        return bitmap
-//    } else {
-//
-//    }
 //}

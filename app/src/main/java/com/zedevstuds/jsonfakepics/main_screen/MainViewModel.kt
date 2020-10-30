@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zedevstuds.jsonfakepics.*
 import com.zedevstuds.jsonfakepics.model.User
+import com.zedevstuds.jsonfakepics.utils.USERS
+import com.zedevstuds.jsonfakepics.utils.getDataFromNetwork
+import com.zedevstuds.jsonfakepics.utils.parseUsers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

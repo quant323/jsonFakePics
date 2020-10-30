@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zedevstuds.jsonfakepics.*
 import com.zedevstuds.jsonfakepics.model.Album
 import com.zedevstuds.jsonfakepics.model.Photo
+import com.zedevstuds.jsonfakepics.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.zedevstuds.jsonfakepics.LoadingStatus
-import com.zedevstuds.jsonfakepics.USER_ID_BUNDLE
+import com.zedevstuds.jsonfakepics.utils.LoadingStatus
+import com.zedevstuds.jsonfakepics.utils.USER_ID_BUNDLE
 import com.zedevstuds.jsonfakepics.databinding.FragmentPhotosBinding
 
 class PhotosFragment : Fragment() {

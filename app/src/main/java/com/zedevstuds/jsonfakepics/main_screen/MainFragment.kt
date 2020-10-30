@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.zedevstuds.jsonfakepics.R
-import com.zedevstuds.jsonfakepics.USER_ID_BUNDLE
+import com.zedevstuds.jsonfakepics.utils.USER_ID_BUNDLE
 import com.zedevstuds.jsonfakepics.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {

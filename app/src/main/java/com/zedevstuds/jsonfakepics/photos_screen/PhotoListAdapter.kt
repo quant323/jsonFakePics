@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.zedevstuds.jsonfakepics.BitmapCache
-import com.zedevstuds.jsonfakepics.TAG
+import com.zedevstuds.jsonfakepics.utils.BitmapCache
+import com.zedevstuds.jsonfakepics.utils.TAG
 import com.zedevstuds.jsonfakepics.databinding.ItemPhotoBinding
-import com.zedevstuds.jsonfakepics.getImageFromNetwork
+import com.zedevstuds.jsonfakepics.utils.getImageFromNetwork
 import com.zedevstuds.jsonfakepics.model.Photo
 import kotlinx.coroutines.*
 
@@ -36,7 +36,7 @@ class PhotoListAdapter(private val imageSetter: PhotoListAdapter.ImageSetter) : 
     }
 
     // ViewHolder
-    inner class PhotoViewHolder(private val binding: ItemPhotoBinding) : RecyclerView.ViewHolder(binding.root) {
+    class PhotoViewHolder(private val binding: ItemPhotoBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(photo: Photo) {
             binding.photoTitleTextView.text = photo.title
             CoroutineScope(Dispatchers.Main).launch {
@@ -44,16 +44,14 @@ class PhotoListAdapter(private val imageSetter: PhotoListAdapter.ImageSetter) : 
                 binding.photoImageView.setImageBitmap(downloadImageByUrl(photo.url))
                 binding.progressBar.visibility = View.GONE
             }
-
-//            // Загружаем изображение по URL и устанавливаем его в ImageView
-//           imageSetter.setImage(binding.photoImageView, binding.progressBar, photo.url)
         }
 
         // Загружает изображение по URL и возвращает его как Bitmap
         private suspend fun downloadImageByUrl(url: String): Bitmap? {
-            var image: Bitmap?
             return withContext(Dispatchers.IO) {
-                image = BitmapCache.getBitmapFromMemCache(url)
+                // Сперва ищем изображение в кэше
+                var image = BitmapCache.getBitmapFromMemCache(url)
+                // Если изображения нет в кэше - загружаем его из сети и помещем в кэш
                 if (image != null) {
                     Log.d(TAG, "get image from CACHE")
                     return@withContext image
@@ -65,12 +63,6 @@ class PhotoListAdapter(private val imageSetter: PhotoListAdapter.ImageSetter) : 
                     return@withContext image
                 }
             }
-
-//            return withContext(Dispatchers.IO) {
-//                Log.d(TAG, "downloadImageByUrl: ")
-//
-//                getImageFromNetwork(url)
-//            }
         }
     }
 
