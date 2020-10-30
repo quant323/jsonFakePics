@@ -39,7 +39,7 @@ class UserListAdapter(private val onClickListener: OnClickListener) : RecyclerVi
         }
     }
 
-
+    // Обработчик нажатия на пользователя
     class OnClickListener(val clickListener: (user: User) -> Unit) {
         fun onClick(user: User) {
             clickListener(user)
