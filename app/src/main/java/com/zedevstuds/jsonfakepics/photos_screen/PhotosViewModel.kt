@@ -26,29 +26,25 @@ class PhotosViewModel : ViewModel() {
     fun getUserPhotosss(userId: Long?) {
         viewModelScope.launch {
             _status.value = LoadingStatus.LOADING
-            val userAlbums = getUserAlbums(userId, getAlbums())
- //           getImageTest(getPhotos()[0].url)
-            _userPhotos.value = getUserPhotos(userAlbums, getPhotos())
+            val userAlbums = getUserAlbums(userId, getAlbums(userId))
+            val albumsList: List<String> = userAlbums.map {
+                it.id.toString()
+            }
+            _userPhotos.value = getUserPhotos(userAlbums, getPhotos(albumsList))
             _status.value = LoadingStatus.DONE
         }
     }
 
-    private suspend fun getAlbums(): List<Album> {
+    private suspend fun getAlbums(userId: Long?): List<Album> {
         return withContext(Dispatchers.IO) {
-            parseAlbums(getDataFromNetwork(ALBUMS))
+            parseAlbums(getDataFromNetwork(ALBUMS, USER_ID, userId.toString()))
         }
     }
 
-    private suspend fun getPhotos(): List<Photo> {
+    private suspend fun getPhotos(albumsId: List<String>): List<Photo> {
         return withContext(Dispatchers.IO) {
-            parsePhotos(getDataFromNetwork(PHOTOS))
+            parsePhotos(getDataFromNetwork(PHOTOS, ALBUM_ID, *albumsId.toTypedArray()))
         }
     }
-
-//    private suspend fun getImageTest(url: String) {
-//        return withContext(Dispatchers.IO) {
-//            getImageBitmap(url)
-//        }
-//    }
 
 }

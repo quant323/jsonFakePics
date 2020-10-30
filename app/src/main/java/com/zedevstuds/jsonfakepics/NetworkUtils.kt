@@ -2,6 +2,7 @@ package com.zedevstuds.jsonfakepics
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Log
 import com.zedevstuds.jsonfakepics.model.Album
 import com.zedevstuds.jsonfakepics.model.Photo
@@ -17,19 +18,46 @@ import javax.net.ssl.HttpsURLConnection
 const val TAG = "myLog"
 
 // Константа для передачи Bundle во второй фрагмент
-const val USER_ID = "user_id"
+const val USER_ID_BUNDLE = "user_id_bundle"
 
 // Enum состояний загрузки
 enum class LoadingStatus { LOADING, ERROR, DONE}
 
 // Константы для формирования URL запроса
+const val BASE_URL = "https://jsonplaceholder.typicode.com/"
 const val USERS = "users"
 const val ALBUMS = "albums"
 const val PHOTOS = "photos"
-const val BASE_URL = "https://jsonplaceholder.typicode.com/"
+const val USER_ID = "userId"
+const val ALBUM_ID = "albumId"
 
 // Загружает json по url и возвращает его
-fun getDataFromNetwork(query: String): String {
+fun getDataFromNetwork(entity: String, queryKey: String = "", vararg queryValues: String = arrayOf("")): String {
+    val uri = Uri.parse(BASE_URL).buildUpon().appendPath(entity)
+    if (queryKey.isNotEmpty()) {
+        for (value in queryValues) {
+            Log.d(TAG, "We are in for loop!")
+            uri.appendQueryParameter(queryKey, value)
+        }
+    }
+    Log.d(TAG, "Full uri: $uri")
+    val requestUrl = URL(uri.toString())
+
+    val urlConnection = requestUrl.openConnection() as (HttpURLConnection)
+    urlConnection.requestMethod = "GET"
+    urlConnection.connect()
+
+    val inputStream = urlConnection.inputStream
+    val reader = BufferedReader(InputStreamReader(inputStream))
+    val jsonString = reader.readText()
+
+    urlConnection.disconnect()
+    reader.close()
+    return jsonString
+}
+
+
+fun getDataFromNetwork_old(query: String): String {
     val uriString = BASE_URL + query
     Log.d(TAG, uriString)
     val requestUrl = URL(uriString)

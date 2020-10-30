@@ -1,15 +1,11 @@
 package com.zedevstuds.jsonfakepics.main_screen
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.zedevstuds.jsonfakepics.TAG
-import com.zedevstuds.jsonfakepics.USERS
-import com.zedevstuds.jsonfakepics.getDataFromNetwork
+import com.zedevstuds.jsonfakepics.*
 import com.zedevstuds.jsonfakepics.model.User
-import com.zedevstuds.jsonfakepics.parseUsers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
