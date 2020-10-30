@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.zedevstuds.jsonfakepics.utils.BitmapCache
 import com.zedevstuds.jsonfakepics.utils.TAG
@@ -14,7 +13,7 @@ import com.zedevstuds.jsonfakepics.utils.getImageFromNetwork
 import com.zedevstuds.jsonfakepics.model.Photo
 import kotlinx.coroutines.*
 
-class PhotoListAdapter(private val imageSetter: PhotoListAdapter.ImageSetter) : RecyclerView.Adapter<PhotoListAdapter.PhotoViewHolder>() {
+class PhotoListAdapter : RecyclerView.Adapter<PhotoListAdapter.PhotoViewHolder>() {
 
     var photoList = listOf<Photo>()
         set(value) {
@@ -63,13 +62,6 @@ class PhotoListAdapter(private val imageSetter: PhotoListAdapter.ImageSetter) : 
                     return@withContext image
                 }
             }
-        }
-    }
-
-    // TODO: 30.10.2020 Delete this class?
-    class ImageSetter(val imageSetter: (view: ImageView, progressBar: View, url: String) -> Unit) {
-        fun setImage(view: ImageView, progressBar: View, url: String) {
-            imageSetter(view, progressBar, url)
         }
     }
 

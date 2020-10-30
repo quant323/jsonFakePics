@@ -1,7 +1,6 @@
 package com.zedevstuds.jsonfakepics.utils
 
 import android.graphics.Bitmap
-import android.util.Log
 import android.util.LruCache
 
 // Работа с Кэшем
@@ -14,12 +13,10 @@ object BitmapCache {
         val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
         // Задаем размер Кэша
         val cacheSize = maxMemory / 4
-        Log.d(TAG, "maxMemory: $maxMemory; cacheSize: $cacheSize")
 
         // Создаем объект LruCache
         memoryCache = object : LruCache<String, Bitmap>(cacheSize) {
             override fun sizeOf(key: String?, value: Bitmap?): Int {
-                Log.d(TAG, "sizeOfImage: ${value?.byteCount?.div(1024)}")
                 return value?.byteCount?.div(1024) ?: 0
             }
         }

@@ -23,14 +23,12 @@ class PhotosFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPhotosBinding.inflate(layoutInflater, container, false)
-        // Получаем id выбранного пользхователя
+        // Получаем переданный id пользхователя
         val userId = arguments?.getLong(USER_ID_BUNDLE)
 
         // На вход адаптера передаем объект класса ImageSetter для установки изображения в ImageView
         // элементов списка RecyclerView
-        val adapter = PhotoListAdapter(PhotoListAdapter.ImageSetter { view, progressBar, url ->
-           // setImageByUrl(view, progressBar, url)
-        })
+        val adapter = PhotoListAdapter()
         binding.photosResView.adapter = adapter
 
         viewModel = ViewModelProvider(this).get(PhotosViewModel::class.java)
@@ -50,22 +48,5 @@ class PhotosFragment : Fragment() {
         viewModel.getUserPhotos(userId)
         return binding.root
     }
-
-//    // Устанавливает изображение в ImageView
-//    private fun setImageByUrl(view: ImageView, progressBar: View, url: String) {
-//        CoroutineScope(Dispatchers.Main).launch {
-//            progressBar.visibility = View.VISIBLE
-//            view.setImageBitmap(downloadImageByUrl(url))
-//            progressBar.visibility = View.GONE
-//        }
-//    }
-//
-//    // Загружает изображение по URL и возвращает его как Bitmap
-//    private suspend fun downloadImageByUrl(url: String): Bitmap? {
-//        return withContext(Dispatchers.IO) {
-//            Log.d(TAG, "downloadImageByUrl: ")
-//            getImageBitmap(url)
-//        }
-//    }
 
 }
