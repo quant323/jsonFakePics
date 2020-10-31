@@ -26,8 +26,6 @@ class PhotosFragment : Fragment() {
         // Получаем переданный id пользхователя
         val userId = arguments?.getLong(USER_ID_BUNDLE)
 
-        // На вход адаптера передаем объект класса ImageSetter для установки изображения в ImageView
-        // элементов списка RecyclerView
         val adapter = PhotoListAdapter()
         binding.photosResView.adapter = adapter
 

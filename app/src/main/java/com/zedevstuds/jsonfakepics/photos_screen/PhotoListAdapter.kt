@@ -37,9 +37,9 @@ class PhotoListAdapter : RecyclerView.Adapter<PhotoListAdapter.PhotoViewHolder>(
     // ViewHolder
     class PhotoViewHolder(private val binding: ItemPhotoBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(photo: Photo) {
-            binding.photoTitleTextView.text = photo.title
             CoroutineScope(Dispatchers.Main).launch {
                 binding.progressBar.visibility = View.VISIBLE
+                binding.photoTitleTextView.text = photo.title
                 binding.photoImageView.setImageBitmap(downloadImageByUrl(photo.url))
                 binding.progressBar.visibility = View.GONE
             }
@@ -51,16 +51,12 @@ class PhotoListAdapter : RecyclerView.Adapter<PhotoListAdapter.PhotoViewHolder>(
                 // Сперва ищем изображение в кэше
                 var image = BitmapCache.getBitmapFromMemCache(url)
                 // Если изображения нет в кэше - загружаем его из сети и помещем в кэш
-                if (image != null) {
-                    Log.d(TAG, "get image from CACHE")
-                    return@withContext image
-                }
-                else {
+                if (image == null) {
                     image = getImageFromNetwork(url)
                     Log.d(TAG, "get image from NETWORK")
                     BitmapCache.addBitmapToMemoryCache(url, image!!)
-                    return@withContext image
-                }
+                } else Log.d(TAG, "get image from CACHE")
+                image
             }
         }
     }
