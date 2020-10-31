@@ -102,7 +102,6 @@ fun parseUsers(json: String): List<User> {
 // Парсит json и возвращает список альбомов
 fun parseAlbums(json: String): List<Album> {
     val albumsList = ArrayList<Album>()
-//    Log.d(TAG, "json is: $json and isNotEmpty = ${json.isNotEmpty()}")
     if (json.isNotEmpty()) {
         try {
             val jsonArray = JSONArray(json)
