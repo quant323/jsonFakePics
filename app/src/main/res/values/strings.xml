@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">jsonFakePics</string>
-    <string name="image">image</string>
+    <string name="image_for_content_description">image</string>
 
-
+    <string name="title_users">Users</string>
+    <string name="title_photos">Photos</string>
 </resources>
