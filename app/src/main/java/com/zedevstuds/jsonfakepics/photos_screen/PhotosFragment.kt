@@ -38,9 +38,22 @@ class PhotosFragment : Fragment() {
         // Наблюдаем за изменением статуса загрузки
         viewModel.status.observe(viewLifecycleOwner, Observer {
             when(it) {
-                LoadingStatus.LOADING -> binding.mainProgressBar.visibility = View.VISIBLE
-                LoadingStatus.DONE -> binding.mainProgressBar.visibility = View.GONE
-                else -> binding.mainProgressBar.visibility = View.GONE
+                LoadingStatus.LOADING -> {
+                    binding.photosProgressBar.visibility = View.VISIBLE
+                    binding.photosErrorTextView.visibility = View.GONE
+                }
+                LoadingStatus.DONE -> {
+                    binding.photosProgressBar.visibility = View.GONE
+                    binding.photosErrorTextView.visibility = View.GONE
+                }
+                LoadingStatus.ERROR -> {
+                    binding.photosProgressBar.visibility = View.GONE
+                    binding.photosErrorTextView.visibility = View.VISIBLE
+                }
+                else -> {
+                    binding.photosProgressBar.visibility = View.GONE
+                    binding.photosErrorTextView.visibility = View.VISIBLE
+                }
             }
         })
         viewModel.getUserPhotos(userId)

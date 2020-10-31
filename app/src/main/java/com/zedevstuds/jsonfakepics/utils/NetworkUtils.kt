@@ -14,6 +14,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
+import kotlin.jvm.Throws
 
 const val TAG = "myLog"
 
@@ -33,7 +34,7 @@ const val ALBUM_ID = "albumId"
 
 // Загружает json по url и возвращает его
 fun getDataFromNetwork(entity: String, queryKey: String = "", vararg queryValues: String = arrayOf("")): String {
-    var jsonString: String
+    var jsonString = ""
     try {
         val uri = Uri.parse(BASE_URL).buildUpon().appendPath(entity)
         if (queryKey.isNotEmpty()) {
@@ -52,11 +53,10 @@ fun getDataFromNetwork(entity: String, queryKey: String = "", vararg queryValues
         val reader = BufferedReader(InputStreamReader(inputStream))
         jsonString = reader.readText()
 
-        urlConnection.disconnect()
-        reader.close()
+//        urlConnection.disconnect()
+//        reader.close()
     } catch (e: IOException) {
         Log.d(TAG, "Error while downloading a json: ${e.message}")
-        jsonString = ""
     }
     return jsonString
 }
@@ -80,52 +80,66 @@ fun getImageFromNetwork(urlString: String): Bitmap? {
 
 // Парсит json и возвращает список пользователей
 fun parseUsers(json: String): List<User> {
-    var userList: ArrayList<User> = ArrayList()
-    try {
-        val jsonArray = JSONArray(json)
-        userList = ArrayList()
-        var id: Long
-        var name: String
-        for (i in 0 until jsonArray.length()) {
-            id = jsonArray.getJSONObject(i).getString("id").toLong()
-            name = jsonArray.getJSONObject(i).getString("name")
-            val user = User(id, name)
-            userList.add(user)
+    val userList: ArrayList<User> = ArrayList()
+    if (json.isNotEmpty()) {
+        try {
+            val jsonArray = JSONArray(json)
+            var id: Long
+            var name: String
+            for (i in 0 until jsonArray.length()) {
+                id = jsonArray.getJSONObject(i).getString("id").toLong()
+                name = jsonArray.getJSONObject(i).getString("name")
+                val user = User(id, name)
+                userList.add(user)
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "Error while parsing users: ${e.message}")
         }
-    } catch (e: Exception) {
-        Log.d(TAG, "Error while parsing users: ${e.message}")
     }
     return userList
 }
 
 // Парсит json и возвращает список альбомов
 fun parseAlbums(json: String): List<Album> {
-    val jsonArray = JSONArray(json)
     val albumsList = ArrayList<Album>()
-    var userId: Long
-    var id: Long
-    for (i in 0 until jsonArray.length()) {
-        userId = jsonArray.getJSONObject(i).getString("userId").toLong()
-        id = jsonArray.getJSONObject(i).getString("id").toLong()
-        val album = Album(userId, id)
-        albumsList.add(album)
+//    Log.d(TAG, "json is: $json and isNotEmpty = ${json.isNotEmpty()}")
+    if (json.isNotEmpty()) {
+        try {
+            val jsonArray = JSONArray(json)
+            var userId: Long
+            var id: Long
+            for (i in 0 until jsonArray.length()) {
+                userId = jsonArray.getJSONObject(i).getString("userId").toLong()
+                id = jsonArray.getJSONObject(i).getString("id").toLong()
+                val album = Album(userId, id)
+                albumsList.add(album)
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "Error while parsing albums: ${e.message}")
+        }
     }
     return albumsList
 }
 
 // Парсит json и возвращает список фото
 fun parsePhotos(json: String): List<Photo> {
-    val jsonArray = JSONArray(json)
     val photoList = ArrayList<Photo>()
-    var albumId: Long
-    var title: String
-    var url: String
-    for (i in 0 until jsonArray.length()) {
-        albumId = jsonArray.getJSONObject(i).getString("albumId").toLong()
-        title = jsonArray.getJSONObject(i).getString("title")
-        url = jsonArray.getJSONObject(i).getString("url")
-        val photo = Photo(albumId, title, url)
-        photoList.add(photo)
+    if (json.isNotEmpty()) {
+        try {
+            val jsonArray = JSONArray(json)
+            var albumId: Long
+            var title: String
+            var url: String
+            for (i in 0 until jsonArray.length()) {
+                albumId = jsonArray.getJSONObject(i).getString("albumId").toLong()
+                title = jsonArray.getJSONObject(i).getString("title")
+                url = jsonArray.getJSONObject(i).getString("url")
+                val photo = Photo(albumId, title, url)
+                photoList.add(photo)
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "Error while parsing photos: ${e.message}")
+        }
     }
     return photoList
 }

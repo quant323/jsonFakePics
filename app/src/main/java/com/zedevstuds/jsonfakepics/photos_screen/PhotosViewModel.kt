@@ -33,14 +33,22 @@ class PhotosViewModel : ViewModel() {
                 it.id.toString()
             }
             // Получаем список фото пользователя, по id альбомов, имеющихся у пользователя
-            _userPhotos.value = getPhotosInAlbums(albumsId)
-            _status.value = LoadingStatus.DONE
+            if (albumsId.isNotEmpty()) {
+                _userPhotos.value = getPhotosInAlbums(albumsId)
+                if (userPhotos.value?.isNotEmpty()!!)
+                    _status.value = LoadingStatus.DONE
+                else _status.value = LoadingStatus.ERROR
+            } else {
+                _userPhotos.value = ArrayList()
+                _status.value = LoadingStatus.ERROR
+            }
         }
     }
 
     // Получает список альбомов выбранного пользователя
     private suspend fun getUserAlbums(userId: Long?): List<Album> {
         return withContext(Dispatchers.IO) {
+//            parseAlbums(getDataFromNetwork(""))
             parseAlbums(getDataFromNetwork(ALBUMS, USER_ID, userId.toString()))
         }
     }
@@ -48,6 +56,7 @@ class PhotosViewModel : ViewModel() {
     // Получает список фото, находящихся в указанных альбомах
     private suspend fun getPhotosInAlbums(albumsId: List<String>): List<Photo> {
         return withContext(Dispatchers.IO) {
+//            parsePhotos(getDataFromNetwork(""))
             parsePhotos(getDataFromNetwork(PHOTOS, ALBUM_ID, *albumsId.toTypedArray()))
         }
     }
