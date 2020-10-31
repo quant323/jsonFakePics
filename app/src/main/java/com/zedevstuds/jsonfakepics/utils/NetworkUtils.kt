@@ -33,25 +33,31 @@ const val ALBUM_ID = "albumId"
 
 // Загружает json по url и возвращает его
 fun getDataFromNetwork(entity: String, queryKey: String = "", vararg queryValues: String = arrayOf("")): String {
-    val uri = Uri.parse(BASE_URL).buildUpon().appendPath(entity)
-    if (queryKey.isNotEmpty()) {
-        for (value in queryValues) {
-            uri.appendQueryParameter(queryKey, value)
+    var jsonString: String
+    try {
+        val uri = Uri.parse(BASE_URL).buildUpon().appendPath(entity)
+        if (queryKey.isNotEmpty()) {
+            for (value in queryValues) {
+                uri.appendQueryParameter(queryKey, value)
+            }
         }
+        Log.d(TAG, "Full uri: $uri")
+        val requestUrl = URL(uri.toString())
+
+        val urlConnection = requestUrl.openConnection() as (HttpURLConnection)
+        urlConnection.requestMethod = "GET"
+        urlConnection.connect()
+
+        val inputStream = urlConnection.inputStream
+        val reader = BufferedReader(InputStreamReader(inputStream))
+        jsonString = reader.readText()
+
+        urlConnection.disconnect()
+        reader.close()
+    } catch (e: IOException) {
+        Log.d(TAG, "Error while downloading a json: ${e.message}")
+        jsonString = ""
     }
-    Log.d(TAG, "Full uri: $uri")
-    val requestUrl = URL(uri.toString())
-
-    val urlConnection = requestUrl.openConnection() as (HttpURLConnection)
-    urlConnection.requestMethod = "GET"
-    urlConnection.connect()
-
-    val inputStream = urlConnection.inputStream
-    val reader = BufferedReader(InputStreamReader(inputStream))
-    val jsonString = reader.readText()
-
-    urlConnection.disconnect()
-    reader.close()
     return jsonString
 }
 
@@ -67,23 +73,27 @@ fun getImageFromNetwork(urlString: String): Bitmap? {
         val inputStream = urlConnection.inputStream
         return BitmapFactory.decodeStream(inputStream)
     } catch (e: IOException) {
-        e.printStackTrace()
-        Log.d(TAG, "getImageBitmap: ${e.message}")
+        Log.d(TAG, "Error while downloading an image: ${e.message}")
         return null
     }
 }
 
 // Парсит json и возвращает список пользователей
 fun parseUsers(json: String): List<User> {
-    val jsonArray = JSONArray(json)
-    val userList = ArrayList<User>()
-    var id: Long
-    var name: String
-    for (i in 0 until jsonArray.length()) {
-        id = jsonArray.getJSONObject(i).getString("id").toLong()
-        name = jsonArray.getJSONObject(i).getString("name")
-        val user = User(id, name)
-        userList.add(user)
+    var userList: ArrayList<User> = ArrayList()
+    try {
+        val jsonArray = JSONArray(json)
+        userList = ArrayList()
+        var id: Long
+        var name: String
+        for (i in 0 until jsonArray.length()) {
+            id = jsonArray.getJSONObject(i).getString("id").toLong()
+            name = jsonArray.getJSONObject(i).getString("name")
+            val user = User(id, name)
+            userList.add(user)
+        }
+    } catch (e: Exception) {
+        Log.d(TAG, "Error while parsing users: ${e.message}")
     }
     return userList
 }
