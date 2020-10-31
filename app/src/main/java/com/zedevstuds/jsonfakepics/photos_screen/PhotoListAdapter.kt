@@ -41,6 +41,9 @@ class PhotoListAdapter : RecyclerView.Adapter<PhotoListAdapter.PhotoViewHolder>(
                 binding.progressBar.visibility = View.VISIBLE
                 binding.photoTitleTextView.text = photo.title
                 binding.photoImageView.setImageBitmap(downloadImageByUrl(photo.url))
+//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//                    binding.photoImageView.clipToOutline = true
+//                }
                 binding.progressBar.visibility = View.GONE
             }
         }
