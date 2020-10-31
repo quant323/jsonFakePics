@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.zedevstuds.jsonfakepics.R
 import com.zedevstuds.jsonfakepics.utils.USER_ID_BUNDLE
 import com.zedevstuds.jsonfakepics.databinding.FragmentMainBinding
-import com.zedevstuds.jsonfakepics.utils.LoadingStatus
+import com.zedevstuds.jsonfakepics.utils.setProgressViews
 
 class MainFragment : Fragment() {
 
@@ -39,26 +39,9 @@ class MainFragment : Fragment() {
             adapter.userList = it
         })
 
-        // Наблюдаем за изменением статуса загрузки
+        // Наблюдаем за изменением статуса загрузки и устанавливаем видимость элементов состояния загрузки
         viewModel.status.observe(viewLifecycleOwner, Observer {
-            when(it) {
-                LoadingStatus.LOADING -> {
-                    binding.mainProgressBar.visibility = View.VISIBLE
-                    binding.mainErrorTextView.visibility = View.GONE
-                }
-                LoadingStatus.DONE -> {
-                    binding.mainProgressBar.visibility = View.GONE
-                    binding.mainErrorTextView.visibility = View.GONE
-                }
-                LoadingStatus.ERROR -> {
-                    binding.mainProgressBar.visibility = View.GONE
-                    binding.mainErrorTextView.visibility = View.VISIBLE
-                }
-                else -> {
-                    binding.mainProgressBar.visibility = View.GONE
-                    binding.mainErrorTextView.visibility = View.VISIBLE
-                }
-            }
+            setProgressViews(it, binding.mainProgressBar, binding.mainErrorTextView)
         })
         viewModel.getUsers()
 

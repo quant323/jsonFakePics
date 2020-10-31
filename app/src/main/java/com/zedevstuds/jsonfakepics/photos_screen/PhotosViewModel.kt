@@ -38,22 +38,6 @@ class PhotosViewModel : ViewModel() {
                 e.printStackTrace()
                 _status.value = LoadingStatus.ERROR
             }
-//            // Получаем список альбомов пользователя
-//            val userAlbums = getUserAlbums(userId)
-//            // Создаем новый list, содержащий только id альбомов пользователя
-//            val albumsId: List<String> = userAlbums.map {
-//                it.id.toString()
-//            }
-//            // Получаем список фото пользователя, по id альбомов, имеющихся у пользователя
-//            if (albumsId.isNotEmpty()) {
-//                _userPhotos.value = getPhotosInAlbums(albumsId)
-//                if (userPhotos.value?.isNotEmpty()!!)
-//                    _status.value = LoadingStatus.DONE
-//                else _status.value = LoadingStatus.ERROR
-//            } else {
-//                _userPhotos.value = ArrayList()
-//                _status.value = LoadingStatus.ERROR
-//            }
         }
     }
 

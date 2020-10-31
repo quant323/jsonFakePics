@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.zedevstuds.jsonfakepics.utils.LoadingStatus
 import com.zedevstuds.jsonfakepics.utils.USER_ID_BUNDLE
 import com.zedevstuds.jsonfakepics.databinding.FragmentPhotosBinding
+import com.zedevstuds.jsonfakepics.utils.setProgressViews
 
 class PhotosFragment : Fragment() {
 
@@ -35,26 +35,9 @@ class PhotosFragment : Fragment() {
         viewModel.userPhotos.observe(viewLifecycleOwner, Observer {
             adapter.photoList = it
         })
-        // Наблюдаем за изменением статуса загрузки
+        // Наблюдаем за изменением статуса загрузки и устанавливаем видимость элементов состояния загрузки
         viewModel.status.observe(viewLifecycleOwner, Observer {
-            when(it) {
-                LoadingStatus.LOADING -> {
-                    binding.photosProgressBar.visibility = View.VISIBLE
-                    binding.photosErrorTextView.visibility = View.GONE
-                }
-                LoadingStatus.DONE -> {
-                    binding.photosProgressBar.visibility = View.GONE
-                    binding.photosErrorTextView.visibility = View.GONE
-                }
-                LoadingStatus.ERROR -> {
-                    binding.photosProgressBar.visibility = View.GONE
-                    binding.photosErrorTextView.visibility = View.VISIBLE
-                }
-                else -> {
-                    binding.photosProgressBar.visibility = View.GONE
-                    binding.photosErrorTextView.visibility = View.VISIBLE
-                }
-            }
+            setProgressViews(it, binding.photosProgressBar, binding.photosErrorTextView)
         })
         viewModel.getUserPhotos(userId)
         return binding.root

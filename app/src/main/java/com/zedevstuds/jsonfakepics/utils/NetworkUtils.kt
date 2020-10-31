@@ -8,6 +8,7 @@ import com.zedevstuds.jsonfakepics.model.Album
 import com.zedevstuds.jsonfakepics.model.Photo
 import com.zedevstuds.jsonfakepics.model.User
 import org.json.JSONArray
+import org.json.JSONException
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -70,7 +71,7 @@ fun getImageFromNetwork(urlString: String): Bitmap? {
 }
 
 // Парсит json и возвращает список пользователей
-@Throws(Exception::class)
+@Throws(JSONException::class)
 fun parseUsers(json: String): List<User> {
     val userList: ArrayList<User> = ArrayList()
     val jsonArray = JSONArray(json)
@@ -86,7 +87,7 @@ fun parseUsers(json: String): List<User> {
 }
 
 // Парсит json и возвращает список альбомов
-@Throws(Exception::class)
+@Throws(JSONException::class)
 fun parseAlbums(json: String): List<Album> {
     val albumsList = ArrayList<Album>()
     val jsonArray = JSONArray(json)
@@ -102,7 +103,7 @@ fun parseAlbums(json: String): List<Album> {
 }
 
 // Парсит json и возвращает список фото
-@Throws(Exception::class)
+@Throws(JSONException::class)
 fun parsePhotos(json: String): List<Photo> {
     val photoList = ArrayList<Photo>()
     val jsonArray = JSONArray(json)
