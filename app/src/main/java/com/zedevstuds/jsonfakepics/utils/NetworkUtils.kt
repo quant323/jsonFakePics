@@ -17,7 +17,7 @@ import javax.net.ssl.HttpsURLConnection
 
 const val TAG = "myLog"
 
-// Константа для передачи Bundle во второй фрагмент
+// Константа для передачи Bundle в PhotosFragment
 const val USER_ID_BUNDLE = "user_id_bundle"
 
 // Enum состояний загрузки
