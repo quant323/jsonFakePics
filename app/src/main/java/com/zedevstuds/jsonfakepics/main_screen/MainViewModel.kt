@@ -1,17 +1,16 @@
 package com.zedevstuds.jsonfakepics.main_screen
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zedevstuds.jsonfakepics.model.User
-import com.zedevstuds.jsonfakepics.utils.LoadingStatus
-import com.zedevstuds.jsonfakepics.utils.USERS
-import com.zedevstuds.jsonfakepics.utils.getDataFromNetwork
-import com.zedevstuds.jsonfakepics.utils.parseUsers
+import com.zedevstuds.jsonfakepics.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONException
 
 class MainViewModel : ViewModel() {
 
@@ -27,10 +26,17 @@ class MainViewModel : ViewModel() {
     fun getUsers() {
         viewModelScope.launch {
             _status.value = LoadingStatus.LOADING
-            _users.value = getUserList()
-            if (users.value?.isNotEmpty()!!)
+            try {
+                _users.value = getUserList()
                 _status.value = LoadingStatus.DONE
-            else _status.value = LoadingStatus.ERROR
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _status.value = LoadingStatus.ERROR
+            }
+//
+//            if (users.value?.isNotEmpty()!!)
+//                _status.value = LoadingStatus.DONE
+//            else _status.value = LoadingStatus.ERROR
         }
     }
 

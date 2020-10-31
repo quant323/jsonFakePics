@@ -10,6 +10,7 @@ import com.zedevstuds.jsonfakepics.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class PhotosViewModel : ViewModel() {
 
@@ -26,22 +27,33 @@ class PhotosViewModel : ViewModel() {
     fun getUserPhotos(userId: Long?) {
         viewModelScope.launch {
             _status.value = LoadingStatus.LOADING
-            // Получаем список альбомов пользователя
-            val userAlbums = getUserAlbums(userId)
-            // Создаем новый list, содержащий только id альбомов пользователя
-            val albumsId: List<String> = userAlbums.map {
-                it.id.toString()
-            }
-            // Получаем список фото пользователя, по id альбомов, имеющихся у пользователя
-            if (albumsId.isNotEmpty()) {
+            try {
+                // Получаем список альбомов пользователя
+                val userAlbums = getUserAlbums(userId)
+                // Создаем новый list, содержащий только id альбомов пользователя
+                val albumsId: List<String> = userAlbums.map { it.id.toString() }
                 _userPhotos.value = getPhotosInAlbums(albumsId)
-                if (userPhotos.value?.isNotEmpty()!!)
-                    _status.value = LoadingStatus.DONE
-                else _status.value = LoadingStatus.ERROR
-            } else {
-                _userPhotos.value = ArrayList()
+                _status.value = LoadingStatus.DONE
+            } catch (e: Exception) {
+                e.printStackTrace()
                 _status.value = LoadingStatus.ERROR
             }
+//            // Получаем список альбомов пользователя
+//            val userAlbums = getUserAlbums(userId)
+//            // Создаем новый list, содержащий только id альбомов пользователя
+//            val albumsId: List<String> = userAlbums.map {
+//                it.id.toString()
+//            }
+//            // Получаем список фото пользователя, по id альбомов, имеющихся у пользователя
+//            if (albumsId.isNotEmpty()) {
+//                _userPhotos.value = getPhotosInAlbums(albumsId)
+//                if (userPhotos.value?.isNotEmpty()!!)
+//                    _status.value = LoadingStatus.DONE
+//                else _status.value = LoadingStatus.ERROR
+//            } else {
+//                _userPhotos.value = ArrayList()
+//                _status.value = LoadingStatus.ERROR
+//            }
         }
     }
 
