@@ -7,9 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.zedevstuds.jsonfakepics.R
 import com.zedevstuds.jsonfakepics.utils.USER_ID_BUNDLE
 import com.zedevstuds.jsonfakepics.databinding.FragmentPhotosBinding
+import com.zedevstuds.jsonfakepics.utils.isNetworkAvailable
 import com.zedevstuds.jsonfakepics.utils.setProgressViews
+import com.zedevstuds.jsonfakepics.utils.showToast
 
 class PhotosFragment : Fragment() {
 
@@ -39,7 +42,12 @@ class PhotosFragment : Fragment() {
         viewModel.status.observe(viewLifecycleOwner, Observer {
             setProgressViews(it, binding.photosProgressBar, binding.photosErrorTextView)
         })
-        viewModel.getUserPhotos(userId)
+
+        // Если сетевое подключение доступно - запрашиваем список фотографий пользователя
+        if (isNetworkAvailable(this.requireContext()))
+            viewModel.getUserPhotos(userId)
+        else showToast(this.requireContext(), getString(R.string.network_not_available))
+
         return binding.root
     }
 

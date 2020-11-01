@@ -52,8 +52,8 @@ fun getDataFromNetwork(
     urlConnection.connect()
     val inputStream = urlConnection.inputStream
     val reader = BufferedReader(InputStreamReader(inputStream))
-    //        urlConnection.disconnect()
-    //        reader.close()
+//    urlConnection.disconnect()
+//    reader.close()
     return reader.readText()
 }
 
@@ -67,6 +67,7 @@ fun getImageFromNetwork(urlString: String): Bitmap? {
     urlConnection.setRequestProperty("User-Agent", "jsonFakePics")
     urlConnection.connect()
     val inputStream = urlConnection.inputStream
+//    urlConnection.disconnect()
     return BitmapFactory.decodeStream(inputStream)
 }
 

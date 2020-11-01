@@ -5,4 +5,5 @@
     <string name="title_users">Users</string>
     <string name="title_photos">Photos</string>
     <string name="error_message">An Error Occurred!</string>
+    <string name="network_not_available">Network in not available!</string>
 </resources>

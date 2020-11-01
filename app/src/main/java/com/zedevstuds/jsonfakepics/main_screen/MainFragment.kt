@@ -1,10 +1,15 @@
 package com.zedevstuds.jsonfakepics.main_screen
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -12,7 +17,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.zedevstuds.jsonfakepics.R
 import com.zedevstuds.jsonfakepics.utils.USER_ID_BUNDLE
 import com.zedevstuds.jsonfakepics.databinding.FragmentMainBinding
+import com.zedevstuds.jsonfakepics.utils.isNetworkAvailable
 import com.zedevstuds.jsonfakepics.utils.setProgressViews
+import com.zedevstuds.jsonfakepics.utils.showToast
 
 class MainFragment : Fragment() {
 
@@ -35,6 +42,7 @@ class MainFragment : Fragment() {
         binding.usersResView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        // Наблюдаем за изменением списка пользователей
         viewModel.users.observe(viewLifecycleOwner, Observer {
             adapter.userList = it
         })
@@ -43,9 +51,16 @@ class MainFragment : Fragment() {
         viewModel.status.observe(viewLifecycleOwner, Observer {
             setProgressViews(it, binding.mainProgressBar, binding.mainErrorTextView)
         })
-        viewModel.getUsers()
+
+        // Если сетевое подключение доступно - запрашиваем список пользователей
+        if (isNetworkAvailable(this.requireContext()))
+            viewModel.getUsers()
+        else showToast(this.requireContext(), getString(R.string.network_not_available))
 
         return binding.root
     }
+
+
+
 
 }
