@@ -26,7 +26,7 @@ class PhotosFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPhotosBinding.inflate(layoutInflater, container, false)
-        // Получаем переданный id пользхователя
+        // Получаем переданный id пользователя
         val userId = arguments?.getLong(USER_ID_BUNDLE)
 
         val adapter = PhotoListAdapter()

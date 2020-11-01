@@ -39,7 +39,6 @@ fun isNetworkAvailable(context: Context): Boolean {
     } else {
         val networkInfo = conManager.activeNetworkInfo ?: return false
         return networkInfo.isConnected
-
     }
 }
 

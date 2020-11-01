@@ -1,7 +1,6 @@
 package com.zedevstuds.jsonfakepics.utils
 
 import android.graphics.Bitmap
-import android.util.Log
 import android.util.LruCache
 
 // Работа с Кэшем

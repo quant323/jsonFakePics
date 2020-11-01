@@ -38,7 +38,6 @@ class MainViewModel : ViewModel() {
     // получаем данные из сети и парсим json. На выходе получаем list of Users
     private suspend fun getUserList(): List<User> {
         return withContext(Dispatchers.IO) {
-//            parseUsers("")
             parseUsers(getJSONFromNetwork(USERS))
         }
     }

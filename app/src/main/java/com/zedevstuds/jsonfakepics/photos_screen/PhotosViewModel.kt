@@ -44,7 +44,6 @@ class PhotosViewModel : ViewModel() {
     // Получает список альбомов выбранного пользователя
     private suspend fun getUserAlbums(userId: Long?): List<Album> {
         return withContext(Dispatchers.IO) {
-//            parseAlbums(getDataFromNetwork(""))
             parseAlbums(getJSONFromNetwork(ALBUMS, USER_ID, userId.toString()))
         }
     }
@@ -52,7 +51,6 @@ class PhotosViewModel : ViewModel() {
     // Получает список фото, находящихся в указанных альбомах
     private suspend fun getPhotosInAlbums(albumsId: List<String>): List<Photo> {
         return withContext(Dispatchers.IO) {
-//            parsePhotos(getDataFromNetwork(""))
             parsePhotos(getJSONFromNetwork(PHOTOS, ALBUM_ID, *albumsId.toTypedArray()))
         }
     }
