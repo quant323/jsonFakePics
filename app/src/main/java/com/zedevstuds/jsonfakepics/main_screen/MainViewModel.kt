@@ -39,7 +39,7 @@ class MainViewModel : ViewModel() {
     private suspend fun getUserList(): List<User> {
         return withContext(Dispatchers.IO) {
 //            parseUsers("")
-            parseUsers(getDataFromNetwork(USERS))
+            parseUsers(getJSONFromNetwork(USERS))
         }
     }
 

@@ -35,40 +35,51 @@ const val ALBUM_ID = "albumId"
 
 // Загружает json по url и возвращает его
 @Throws(IOException::class)
-fun getDataFromNetwork(
+fun getJSONFromNetwork(
     entity: String, queryKey: String = "",
     vararg queryValues: String = arrayOf("")
 ): String {
+    val outputJson: String
+    var urlConnection: HttpURLConnection? = null
     val uri = Uri.parse(BASE_URL).buildUpon().appendPath(entity)
     if (queryKey.isNotEmpty()) {
-        for (value in queryValues) {
+        for (value in queryValues)
             uri.appendQueryParameter(queryKey, value)
-        }
     }
     Log.d(TAG, "Full uri: $uri")
     val requestUrl = URL(uri.toString())
-    val urlConnection = requestUrl.openConnection() as (HttpURLConnection)
-    urlConnection.requestMethod = "GET"
-    urlConnection.connect()
-    val inputStream = urlConnection.inputStream
-    val reader = BufferedReader(InputStreamReader(inputStream))
-//    urlConnection.disconnect()
-//    reader.close()
-    return reader.readText()
+    try {
+        urlConnection = requestUrl.openConnection() as (HttpURLConnection)
+        urlConnection.requestMethod = "GET"
+        urlConnection.connect()
+        val inputStream = urlConnection.inputStream
+        val reader = BufferedReader(InputStreamReader(inputStream))
+        outputJson = reader.readText()
+        reader.close()
+    } finally {
+        urlConnection?.disconnect()
+    }
+    return outputJson
 }
 
 // Загружает изображение по URL и возвращает его как Bitmap
 @Throws(IOException::class)
 fun getImageFromNetwork(urlString: String): Bitmap? {
+    val bitmap: Bitmap?
+    var urlConnection: HttpURLConnection? = null
     val requestUrl = URL(urlString)
-    val urlConnection = requestUrl.openConnection() as (HttpsURLConnection)
-    urlConnection.doInput = true
-    urlConnection.requestMethod = "GET"
-    urlConnection.setRequestProperty("User-Agent", "jsonFakePics")
-    urlConnection.connect()
-    val inputStream = urlConnection.inputStream
-//    urlConnection.disconnect()
-    return BitmapFactory.decodeStream(inputStream)
+    try {
+        urlConnection = requestUrl.openConnection() as (HttpsURLConnection)
+        urlConnection.doInput = true
+        urlConnection.requestMethod = "GET"
+        urlConnection.setRequestProperty("User-Agent", "jsonFakePics")
+        urlConnection.connect()
+        val inputStream = urlConnection.inputStream
+        bitmap = BitmapFactory.decodeStream(inputStream)
+    } finally {
+        urlConnection?.disconnect()
+    }
+    return bitmap
 }
 
 // Парсит json и возвращает список пользователей

@@ -22,10 +22,6 @@ fun setProgressViews(status: LoadingStatus, progressBar: View, textView: View) {
             progressBar.visibility = View.GONE
             textView.visibility = View.VISIBLE
         }
-        else -> {
-            progressBar.visibility = View.GONE
-            textView.visibility = View.VISIBLE
-        }
     }
 }
 

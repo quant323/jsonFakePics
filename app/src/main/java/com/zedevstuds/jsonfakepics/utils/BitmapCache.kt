@@ -12,15 +12,12 @@ object BitmapCache {
     init {
         // Определяем максимальную память JVM
         val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
-        Log.d(TAG, "max memory: $maxMemory")
         // Задаем размер Кэша
         val cacheSize = maxMemory / 4
-        Log.d(TAG, "cache size: $cacheSize")
 
         // Создаем объект LruCache
         memoryCache = object : LruCache<String, Bitmap>(cacheSize) {
             override fun sizeOf(key: String?, value: Bitmap?): Int {
-                Log.d(TAG, "image_size: ${value?.byteCount?.div(1024)}")
                 return value?.byteCount?.div(1024) ?: 0
             }
         }

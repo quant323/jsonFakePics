@@ -45,7 +45,7 @@ class PhotosViewModel : ViewModel() {
     private suspend fun getUserAlbums(userId: Long?): List<Album> {
         return withContext(Dispatchers.IO) {
 //            parseAlbums(getDataFromNetwork(""))
-            parseAlbums(getDataFromNetwork(ALBUMS, USER_ID, userId.toString()))
+            parseAlbums(getJSONFromNetwork(ALBUMS, USER_ID, userId.toString()))
         }
     }
 
@@ -53,7 +53,7 @@ class PhotosViewModel : ViewModel() {
     private suspend fun getPhotosInAlbums(albumsId: List<String>): List<Photo> {
         return withContext(Dispatchers.IO) {
 //            parsePhotos(getDataFromNetwork(""))
-            parsePhotos(getDataFromNetwork(PHOTOS, ALBUM_ID, *albumsId.toTypedArray()))
+            parsePhotos(getJSONFromNetwork(PHOTOS, ALBUM_ID, *albumsId.toTypedArray()))
         }
     }
 
